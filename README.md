@@ -1,4 +1,4 @@
-# SCROAM v0.1
+# SCROAM v0.1.1
 
 SCROAM is a minimal, mechanism-based agent simulation for a master's thesis on
 supply chain resilience under non-damage business interruption (NDBI).
@@ -9,7 +9,7 @@ peer-to-peer (P2P) liquidity pool can reduce unfunded Additional Increased Cost
 of Working (AICOW), production disruption, stock-outs, and supply chain ripple
 effects.
 
-SCROAM v0.1 uses plain Python classes rather than Mesa. The priority is a
+SCROAM v0.1.1 uses plain Python classes rather than Mesa. The priority is a
 transparent mechanism that can be explained, tested, and extended in the
 thesis.
 
@@ -52,7 +52,7 @@ when the pool is depleted.
 - Total system cost proxy
 - P2P pool depletion and remaining capital
 
-For v0.1, total system cost is defined as residual loss plus insurance and P2P
+For v0.1.1, total system cost is defined as residual loss plus insurance and P2P
 payouts. This is deliberately simplified. Later versions can model premiums,
 pool contributions, financing costs, and transfer costs separately.
 
@@ -201,7 +201,7 @@ scenario comparison.
 
 ## Project Status
 
-Version 0.1 uses synthetic wind and electricity price data. Future versions are
+Version 0.1.1 uses synthetic wind and electricity price data. Future versions are
 intended to integrate empirical ERA5 wind data and EPEX SPOT electricity price
 data, calibrate manufacturing exposure, and introduce explicit supply network
 links for richer ripple-effect analysis.

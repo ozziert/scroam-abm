@@ -79,6 +79,9 @@ class SCROAMModel:
                 traditional_bi_capacity_factor=(
                     self.config.traditional_bi_capacity_factor
                 ),
+                parametric_base_capacity_factor=(
+                    self.config.parametric_base_capacity_factor
+                ),
             )
             for agent_id, energy_intensity in enumerate(energy_intensities)
         ]

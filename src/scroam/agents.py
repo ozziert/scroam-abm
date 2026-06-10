@@ -25,6 +25,7 @@ class ManufacturerAgent:
         p2p_pool: P2PLiquidityPool,
         safety_stock_capacity_factor: float,
         traditional_bi_capacity_factor: float,
+        parametric_base_capacity_factor: float,
     ) -> None:
         self.agent_id = agent_id
         self.inventory = float(inventory)
@@ -37,6 +38,9 @@ class ManufacturerAgent:
         self.p2p_pool = p2p_pool
         self.safety_stock_capacity_factor = safety_stock_capacity_factor
         self.traditional_bi_capacity_factor = traditional_bi_capacity_factor
+        self.parametric_base_capacity_factor = (
+            parametric_base_capacity_factor
+        )
 
         self.total_aicow = 0.0
         self.total_insurance_payout = 0.0
@@ -79,22 +83,10 @@ class ManufacturerAgent:
         )
         funded_amount = insurance_payout + p2p_payout
 
-        effective_capacity = self.baseline_capacity
-        if aicow > 0:
-            funded_ratio = min(funded_amount / aicow, 1.0)
-            effective_capacity = self.baseline_capacity * funded_ratio
-
-            # Comparator scenarios approximate non-parametric coping capacity.
-            if self.scenario == "safety_stock_only":
-                effective_capacity = (
-                    self.baseline_capacity
-                    * self.safety_stock_capacity_factor
-                )
-            elif self.scenario == "traditional_bi":
-                effective_capacity = (
-                    self.baseline_capacity
-                    * self.traditional_bi_capacity_factor
-                )
+        effective_capacity = self._calculate_effective_capacity(
+            aicow=aicow,
+            funded_amount=funded_amount,
+        )
 
         production = effective_capacity
         self.inventory += production
@@ -112,6 +104,39 @@ class ManufacturerAgent:
         self.total_fulfilled += fulfilled
         self.total_production += production
         self.steps_completed += 1
+
+    def _calculate_effective_capacity(
+        self,
+        aicow: float,
+        funded_amount: float,
+    ) -> float:
+        """Translate disruption funding into continuous production capacity.
+
+        Parametric scenarios retain a calibrated minimum capacity during an
+        AICOW shock. Partial funding then restores capacity gradually, avoiding
+        an unrealistic all-or-nothing collapse in production continuity.
+        """
+        if aicow <= 0:
+            return self.baseline_capacity
+
+        if self.scenario == "safety_stock_only":
+            return (
+                self.baseline_capacity
+                * self.safety_stock_capacity_factor
+            )
+
+        if self.scenario == "traditional_bi":
+            return (
+                self.baseline_capacity
+                * self.traditional_bi_capacity_factor
+            )
+
+        funded_ratio = min(max(funded_amount / aicow, 0.0), 1.0)
+        effective_capacity_factor = (
+            self.parametric_base_capacity_factor
+            + (1.0 - self.parametric_base_capacity_factor) * funded_ratio
+        )
+        return self.baseline_capacity * effective_capacity_factor
 
     def metrics(self) -> dict[str, float | int]:
         """Return thesis KPIs for this manufacturer."""

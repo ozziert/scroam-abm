@@ -1,4 +1,4 @@
-"""Run the complete SCROAM v0.1 Monte Carlo demonstration."""
+"""Run the complete SCROAM v0.1.1 Monte Carlo demonstration."""
 
 from pathlib import Path
 
@@ -51,7 +51,7 @@ def main() -> None:
     )
     plot_all_kpis(results, figures_dir)
 
-    print("\nSCROAM v0.1 Scenario Comparison\n")
+    print("\nSCROAM v0.1.1 Scenario Comparison\n")
     print(format_clean_summary(clean_summary))
 
 

@@ -27,3 +27,4 @@ class SimulationConfig:
     p2p_coverage_ratio: float = 0.60
     safety_stock_capacity_factor: float = 0.65
     traditional_bi_capacity_factor: float = 0.65
+    parametric_base_capacity_factor: float = 0.65
