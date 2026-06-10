@@ -16,6 +16,17 @@ MAJOR_KPIS = [
     "pool_remaining_capital",
 ]
 
+CLEAN_SUMMARY_COLUMNS = [
+    "scenario",
+    "stockout_rate_mean",
+    "average_service_level_mean",
+    "residual_loss_mean",
+    "total_system_cost_mean",
+    "total_insurance_payout_mean",
+    "total_p2p_payout_mean",
+    "pool_remaining_capital_mean",
+]
+
 
 def summarize_results(results_df: pd.DataFrame) -> pd.DataFrame:
     """Calculate mean, standard deviation, minimum, and maximum by scenario."""
@@ -31,3 +42,13 @@ def summarize_results(results_df: pd.DataFrame) -> pd.DataFrame:
         f"{kpi}_{statistic}" for kpi, statistic in summary.columns
     ]
     return summary.reset_index()
+
+
+def create_clean_summary(summary_df: pd.DataFrame) -> pd.DataFrame:
+    """Return the thesis-facing scenario comparison columns."""
+    missing_columns = set(CLEAN_SUMMARY_COLUMNS) - set(summary_df.columns)
+    if missing_columns:
+        missing = ", ".join(sorted(missing_columns))
+        raise ValueError(f"summary_df is missing required columns: {missing}")
+
+    return summary_df[CLEAN_SUMMARY_COLUMNS].copy()
