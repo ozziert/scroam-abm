@@ -136,17 +136,43 @@ gh repo create scroam-abm --public --source=. --remote=origin --push
 Before committing, `git status --short` should not list `.venv/`, `build/`,
 Python cache files, generated CSV files, or generated PNG files.
 
-## Run Locally
+## Local Setup
 
 Python 3.10 or newer is required.
+
+### macOS/Linux
 
 ```bash
 git clone https://github.com/YOUR_GITHUB_USERNAME/scroam-abm.git
 cd scroam-abm
 python -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
-pytest
+python -m pip install -r requirements.txt
+python -m pytest
+python scripts/run_colab_demo.py
+```
+
+### Windows PowerShell
+
+```powershell
+git clone https://github.com/YOUR_GITHUB_USERNAME/scroam-abm.git
+cd scroam-abm
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+py -m pip install -r requirements.txt
+py -m pytest
+py scripts\run_colab_demo.py
+```
+
+### Git Bash on Windows
+
+```bash
+git clone https://github.com/YOUR_GITHUB_USERNAME/scroam-abm.git
+cd scroam-abm
+python -m venv .venv
+source .venv/Scripts/activate
+python -m pip install -r requirements.txt
+python -m pytest
 python scripts/run_colab_demo.py
 ```
 
